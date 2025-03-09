@@ -1,6 +1,6 @@
 import React from "react";
 import TextEditor from "../components/textEditor/TextEditor";
-import { Text, View ,StyleSheet} from "react-native";
+import { View, StyleSheet } from "react-native";
 import NavBar from "../components/navBar/NavBar";
 
 const TypeInput = () => {
@@ -27,8 +27,6 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     height: "100%",
-    // display: "flex",
-    // justifyContent: "space-between",
   },
   top: {},
   bottom: {},

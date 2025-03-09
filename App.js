@@ -5,17 +5,22 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BackGroundBase from "./screen/BackGroundBase";
 import TypeInput from "./screen/TypeInput";
+import { ToastProvider } from "react-native-toast-notifications";
+import showCreateNotes from "./screen/ShowCreateNotes";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={BackGroundBase} />
-        <Stack.Screen name="Input" component={TypeInput} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ToastProvider  placement="top">
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={BackGroundBase} />
+          <Stack.Screen name="Input" component={TypeInput} />
+          <Stack.Screen name="createNotes" component={showCreateNotes} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ToastProvider>
   );
 }
 

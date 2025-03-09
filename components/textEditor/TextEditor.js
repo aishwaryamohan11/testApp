@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   View,
@@ -7,9 +8,19 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { useToast } from "react-native-toast-notifications";
 const TextEditor = () => {
-  const [text, setText] = useState("");
-  console.log("text", text);
+  const [title, setTitle] = useState("");
+  const [notes, setNotes] = useState("");
+  console.log("text", title);
+  console.log("setNotes", setNotes);
+
+  const toast = useToast();
+  const navigation = useNavigation();
+  const handleMove = (passTitle, passNotes) => {
+    toast.show("Saved successfully👏");
+    navigation?.navigate("createNotes", { passTitle, passNotes });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -19,6 +30,8 @@ const TextEditor = () => {
             placeholder="Type title here.."
             placeholderTextColor={"white"}
             style={styles.textTitle}
+            value={title}
+            onChangeText={setTitle}
           />
         </View>
         <View style={styles.middle}>
@@ -28,8 +41,8 @@ const TextEditor = () => {
             style={styles.textEditor}
             multiline
             placeholder="Type your notes here..."
-            value={text}
-            onChangeText={setText}
+            value={notes}
+            onChangeText={setNotes}
             placeholderTextColor={"white"}
           />
         </View>
@@ -37,7 +50,7 @@ const TextEditor = () => {
           <Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => alert("Saved!")}
+              onPress={() => handleMove(title, notes)}
             >
               <Text style={styles.buttonText}>Save</Text>
             </TouchableOpacity>
