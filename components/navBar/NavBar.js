@@ -2,18 +2,24 @@ import React from "react";
 import { Image, Text, View, StyleSheet } from "react-native";
 import logo from "../../assets/notesslogo.png";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const NavBar = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.top}>
-          <Image source={logo} alt="logo" style={styles.logo} />
+          <Image source={logo} alt="logo" style={styles.logo} 
+          // onPress={navigation?.navigate("")} 
+          />
         </View>
         <View style={styles.bottom}>
           <View style={styles.icon}>
             {" "}
-            <MaterialIcons name="favorite" size={30} color="white" />{" "}
+            <MaterialIcons name="favorite" size={30} color="white"
+            //  onPress={navigation?.navigate("createNotes")}
+            />{" "}
           </View>
           <View style={styles.icon}>
             {" "}
@@ -31,24 +37,23 @@ const styles = StyleSheet.create({
   container: {
     height: "80",
     display: "flex",
- 
   },
   wrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems:"center",
+    alignItems: "center",
     marginHorizontal: 15,
   },
   logo: {
     paddingBottom: 20,
-    backgroundColor:"black"
+    backgroundColor: "black",
   },
   bottom: {
-    backgroundColor:"black",
+    backgroundColor: "black",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     gap: 20,
-    marginTop:20
+    marginTop: 20,
   },
 });

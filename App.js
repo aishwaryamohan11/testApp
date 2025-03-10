@@ -15,9 +15,8 @@ export default function App() {
     <ToastProvider  placement="top">
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={BackGroundBase} />
+          <Stack.Screen name="Home" component={showCreateNotes} />
           <Stack.Screen name="Input" component={TypeInput} />
-          <Stack.Screen name="createNotes" component={showCreateNotes} />
         </Stack.Navigator>
       </NavigationContainer>
     </ToastProvider>

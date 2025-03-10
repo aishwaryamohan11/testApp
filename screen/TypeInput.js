@@ -1,7 +1,7 @@
 import React from "react";
-import TextEditor from "../components/textEditor/TextEditor";
 import { View, StyleSheet } from "react-native";
 import NavBar from "../components/navBar/NavBar";
+import Editor from "../components/editor/Editor";
 
 const TypeInput = () => {
   return (
@@ -11,7 +11,7 @@ const TypeInput = () => {
           <NavBar />
         </View>
         <View style={styles.bottom}>
-          <TextEditor />
+          <Editor />
         </View>
       </View>
     </View>

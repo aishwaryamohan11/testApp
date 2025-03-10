@@ -2,28 +2,32 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const Card = ({ showTitle, showNotes }) => {
-  console.log("first,0", showTitle);
-  console.log("showNotes,0", showNotes);
+const Card = ({ item,deleteItem,index }) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.left}>
           <View style={styles.leftTop}>
-            <Text style={styles.title}>Title:{showTitle}</Text>
+            <Text style={styles.title}>Title:{item?.input1}</Text>
           </View>
           <View style={styles.leftBottom}>
-            <Text style={styles.notes}>Notes: {showNotes}</Text>
+            <Text style={styles.notes}>Notes: {item?.input2}</Text>
           </View>
         </View>
         <View style={styles.right}>
-            
           <MaterialIcons
             name="favorite"
             size={40}
             color="black"
             style={styles.icon}
             // onPress={handleGoToAdd}
+          />{" "}
+          <MaterialIcons
+            name="delete"
+            size={40}
+            color="black"
+            style={styles.icon}
+            onPress={() => deleteItem(index)}
           />{" "}
         </View>
       </View>
@@ -34,7 +38,7 @@ const Card = ({ showTitle, showNotes }) => {
 export default Card;
 const styles = StyleSheet.create({
   container: {
-    padding:20,
+    padding: 20,
     backgroundColor: "rgba(217, 217, 217, 1)",
     width: 340,
     borderRadius: 20,
@@ -66,6 +70,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     width: 39,
-    height:35,
+    height: 35,
   },
 });
