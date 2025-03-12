@@ -1,67 +1,110 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, Button, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  Button,
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Editor() {
   const navigation = useNavigation();
 
-  const [input1, setInput1] = useState("");
-  const [input2, setInput2] = useState("");
+  const [title, setTitle] = useState("");
+  const [notes, setNotes] = useState("");
 
-  // Save inputs to AsyncStorage
-  const saveToStorage = async () => {
-    if (input1.trim() === "" || input2.trim() === "") {
+  const saveInput = async () => {
+    if (!title.trim() || !notes.trim()) {
       Alert.alert("Error", "Both fields are required!");
       return;
     }
 
     try {
-      const existingData = await AsyncStorage.getItem("savedInputs");
+      const newNote = {
+        id: Date.now(), // Unique ID
+        title,
+        notes,
+        favorite: false, // Default is not favorite
+      };
 
-      let storedArray = existingData ? JSON.parse(existingData) : [];
+      const existingNotes = await AsyncStorage.getItem("savedNotes");
+      const updatedNotes = existingNotes ? JSON.parse(existingNotes) : [];
 
-      if (!Array.isArray(storedArray)) {
-        storedArray = [];
-      }
+      updatedNotes.push(newNote);
+      await AsyncStorage.setItem("savedNotes", JSON.stringify(updatedNotes));
 
-      const newEntry = { input1, input2 };
-      storedArray.push(newEntry);
+      setTitle("");
+      setNotes("");
 
-      await AsyncStorage.setItem("savedInputs", JSON.stringify(storedArray));
-
-      navigation.navigate("Home");
-
-      setInput1("");
-      setInput2("");
+      navigation.goBack();
     } catch (error) {
-      console.error("Error saving data", error);
+      console.error("Error saving note", error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <TextInput
-        placeholder="Enter first text"
-        value={input1}
-        onChangeText={setInput1}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 20 }}
-      />
-
-      <TextInput
-        placeholder="Enter second text"
-        value={input2}
-        onChangeText={setInput2}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 20 }}
-      />
-
-      <Button title="Save & Go to Screen B" onPress={saveToStorage} />
+      <View style={styles.wrapper}>
+        <View style={styles.top}>
+          {" "}
+          <TextInput
+            placeholder="Title :"
+            placeholderTextColor={"white"}
+            value={title}
+            onChangeText={setTitle}
+            style={styles.TextInput}
+          />
+          <TextInput
+            placeholderTextColor={"white"}
+            multiline
+            placeholder="Notes :"
+            value={notes}
+            onChangeText={setNotes}
+            style={styles.TextInput}
+          />
+        </View>
+        <View style={styles.bottom}>
+          <TouchableOpacity onPress={saveInput} style={styles.button}>
+            <Text style={styles.appButtonText}>Save</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "red",
+  container: {},
+  top: {
+    // flex: 1,
+    // backgroundColor: "aqua",
+    padding: 20,
+    rowGap: 50,
+  },
+  bottom: {
+    marginTop: 120,
+    padding: 80,
+  },
+  button: {
+    width: 225,
+    height: 59,
+    borderRadius: 20,
+    backgroundColor: "rgba(217, 217, 217, 1)",
+  },
+  appButtonText: {
+    color: "black",
+    marginLeft: 95,
+    marginTop: 20,
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  TextInput: {
+    color: "rgba(217, 217, 217, 1)",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });

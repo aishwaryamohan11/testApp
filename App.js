@@ -1,22 +1,36 @@
 import "setimmediate";
 import { StyleSheet, Text, View } from "react-native";
-import EmptyNotes from "./screen/EmptyNotes";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import BackGroundBase from "./screen/BackGroundBase";
 import TypeInput from "./screen/TypeInput";
 import { ToastProvider } from "react-native-toast-notifications";
 import showCreateNotes from "./screen/ShowCreateNotes";
+import FavScreen from "./screen/FavScreen";
+import CreateNotes from "./screen/CreateNotes";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
 
   return (
-    <ToastProvider  placement="top">
+    <ToastProvider placement="top">
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={showCreateNotes} />
-          <Stack.Screen name="Input" component={TypeInput} />
+          <Stack.Screen
+            name="Home"
+            component={showCreateNotes}
+            options={{ title: "Notes" }}
+          />
+          <Stack.Screen
+            name="CreateNotes"
+            component={TypeInput}
+            options={{ title: "Add Note" }}
+          />
+          <Stack.Screen name="Favorites" component={FavScreen} />
+          {/* <Stack.Screen
+            name="CreateNotes"
+            component={CreateNotes}
+            options={{ title: "Add Note" }}
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </ToastProvider>

@@ -2,43 +2,45 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
 import NavBar from "../components/navBar/NavBar";
 import Card from "../components/card/Card";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ShowCreateNotes = () => {
   const navigation = useNavigation();
-
-  const [storedData, setStoredData] = useState([]);
+  const [notes, setNotes] = useState([]);
 
   useEffect(() => {
-    loadStoredValues();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", fetchNotes);
+    return unsubscribe;
+  }, [navigation]);
 
-  const loadStoredValues = async () => {
+  const fetchNotes = async () => {
     try {
-      const storedValues = await AsyncStorage.getItem("savedInputs");
-      if (storedValues) {
-        setStoredData(JSON.parse(storedValues));
+      const savedNotes = await AsyncStorage.getItem("savedNotes");
+      if (savedNotes) {
+        setNotes(JSON.parse(savedNotes));
       }
     } catch (error) {
-      console.error("Error loading data", error);
+      console.error("Error loading notes", error);
     }
   };
 
-  const deleteItem = async (index) => {
-    try {
-      let updatedData = [...storedData]; // Copy array
-      updatedData.splice(index, 1); // Remove item
-
-      await AsyncStorage.setItem("savedInputs", JSON.stringify(updatedData)); // Save updated list
-      setStoredData(updatedData); // Update state
-    } catch (error) {
-      console.error("Error deleting item", error);
-    }
+  const toggleFavorite = async (id) => {
+    const updatedNotes = notes.map((note) =>
+      note.id === id ? { ...note, favorite: !note.favorite } : note
+    );
+    setNotes(updatedNotes);
+    await AsyncStorage.setItem("savedNotes", JSON.stringify(updatedNotes));
   };
+  const deleteItem = async (id) => {
+    const updatedNotes = notes.filter((note) => note.id !== id);
+    setNotes(updatedNotes);
+    await AsyncStorage.setItem("savedNotes", JSON.stringify(updatedNotes));
+  };
+
   const handleGoToAdd = () => {
-    navigation.navigate("Input");
+    navigation?.navigate("CreateNotes");
   };
   return (
     <View style={styles.container}>
@@ -49,13 +51,16 @@ const ShowCreateNotes = () => {
           </View>
           <View style={styles.bottom}>
             <FlatList
-              style={styles.FlatList}
-              data={storedData}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index }) => (
+              data={notes}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
                 <View>
-                  {/* <View style={{ marginTop: 10}}> */}
-                  <Card item={item} deleteItem={deleteItem} index={index} />
+                  <Card
+                    deleteItem={deleteItem}
+                    item={item}
+                    index={item?.id}
+                    toggleFavorite={toggleFavorite}
+                  />
                 </View>
               )}
             />
@@ -80,30 +85,16 @@ export default ShowCreateNotes;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "black",
-    flex: 1,
-
-    // display: "flex",
-    // justifyContent: "center",
-    alignItems: "center",
   },
-  wrapper: {
-    height: "100%",
-  },
+  wrapper: {},
   wrapperTop: {
-    // rowGap: 20,
     position: "relative",
   },
-  top: {
-    flex: 0.15,
-    backgroundColor: "aqua",
-  },
+  top: {},
   bottom: {
-    backgroundColor: "red",
-    flex: 1,
-
-    // display: "flex",
-    // justifyContent: "center",
-    // alignItems: "center",
+    paddingBottom: 20,
+    height: 640,
+    alignItems: "center",
   },
 
   wrapperBottom: {

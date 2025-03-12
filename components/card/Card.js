@@ -1,34 +1,48 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const Card = ({ item,deleteItem,index }) => {
+const Card = ({ fav, item, index, del, toggleFavorite, deleteItem }) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.left}>
           <View style={styles.leftTop}>
-            <Text style={styles.title}>Title:{item?.input1}</Text>
+            <Text style={styles.title}>Title: {item?.title}</Text>
           </View>
           <View style={styles.leftBottom}>
-            <Text style={styles.notes}>Notes: {item?.input2}</Text>
+            <Text style={styles.notes}>Notes: {item?.notes}</Text>
           </View>
         </View>
         <View style={styles.right}>
-          <MaterialIcons
-            name="favorite"
-            size={40}
-            color="black"
-            style={styles.icon}
-            // onPress={handleGoToAdd}
-          />{" "}
-          <MaterialIcons
-            name="delete"
-            size={40}
-            color="black"
-            style={styles.icon}
-            onPress={() => deleteItem(index)}
-          />{" "}
+          <View style={styles.fav}>
+            <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
+              <Text
+                style={{
+                  color: item.favorite ? "black" : "rgba(217, 217, 217, 1)",
+                }}
+              >
+                {item.favorite ? (
+                  <MaterialIcons name="favorite" size={30} color="black" />
+                ) : (
+                  <MaterialIcons
+                    name="favorite-border"
+                    size={30}
+                    color="black"
+                  />
+                )}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.fav}>
+            <MaterialIcons
+              // style={styles.icon}
+              name="delete"
+              size={30}
+              color="black"
+              onPress={() => deleteItem(index)}
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -39,16 +53,16 @@ export default Card;
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: "rgba(217, 217, 217, 1)",
+    // backgroundColor: "rgba(217, 217, 217, 1)",
+    backgroundColor: "white",
+
     width: 340,
     borderRadius: 20,
-    // display: "flex",
-    // justifyContent: "center",
-    // alignItems: "center",
+    marginTop: 10,
   },
   wrapper: {
     height: 90,
-    // padding: 20,
+
     flexDirection: "row",
     display: "flex",
     justifyContent: "space-between",
@@ -66,10 +80,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   right: {
-    // flex:1,
+    flexDirection: "row",
+    columnGap: 15,
   },
   icon: {
-    width: 39,
-    height: 35,
+    boxShadow: "2px 2px 2px 2px rgba(217, 217, 217, 0.55)",
   },
 });
