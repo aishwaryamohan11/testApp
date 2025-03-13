@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, FlatList } from "react-native";
+import { View, StyleSheet, Text, FlatList, Alert } from "react-native";
 import NavBar from "../components/navBar/NavBar";
 import Card from "../components/card/Card";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useToast } from "react-native-toast-notifications";
 
 const ShowCreateNotes = () => {
+  const toast = useToast();
+
   const navigation = useNavigation();
   const [notes, setNotes] = useState([]);
 
@@ -34,9 +37,31 @@ const ShowCreateNotes = () => {
     await AsyncStorage.setItem("savedNotes", JSON.stringify(updatedNotes));
   };
   const deleteItem = async (id) => {
-    const updatedNotes = notes.filter((note) => note.id !== id);
-    setNotes(updatedNotes);
-    await AsyncStorage.setItem("savedNotes", JSON.stringify(updatedNotes));
+    try {
+      Alert.alert("Delete Note", "Are you sure you want to delete this note?", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          onPress: async () => {
+            const savedNotes = await AsyncStorage.getItem("savedNotes");
+            // if (savedNotes) {
+            // let allNotes = JSON.parse(savedNotes);
+            const allNotes = notes.filter((note) => note.id !== id);
+            setNotes(allNotes);
+            await AsyncStorage.setItem("savedNotes", JSON.stringify(allNotes));
+            // fetchFavorites(); // Refresh favorites after deletion
+            toast.show("Note deleted successfully", {
+              type: "deleting",
+              placement: "top",
+              duration: 2000,
+            });
+            // }
+          },
+        },
+      ]);
+    } catch (error) {
+      toast.show("Error deleting item", error);
+    }
   };
 
   const handleGoToAdd = () => {

@@ -4,12 +4,11 @@ import { View, StyleSheet, FlatList, Alert } from "react-native";
 import Card from "../components/card/Card";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-// import Toast from "react-native-toast-message";
-// import { useToast } from "react-native-toast-notifications";
+import { useToast } from "react-native-toast-notifications";
 const FavScreen = () => {
   const navigation = useNavigation();
   const [favorites, setFavorites] = useState([]);
-  // const toast = useToast();
+  const toast = useToast();
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", fetchFavorites);
     return unsubscribe;
@@ -39,6 +38,11 @@ const FavScreen = () => {
 
         await AsyncStorage.setItem("savedNotes", JSON.stringify(allNotes));
         fetchFavorites(); // Refresh favorites after update
+        toast.show("removed from favorites ♡", {
+          type: "alert",
+          placement: "top",
+          duration: 2000,
+        });
       }
     } catch (error) {
       console.error("Error updating favorite", error);
@@ -62,6 +66,11 @@ const FavScreen = () => {
                 JSON.stringify(allNotes)
               );
               fetchFavorites(); // Refresh favorites after deletion
+              toast.show("Note deleted successfully", {
+                type: "deleting",
+                placement: "top",
+                duration: 2000,
+              });
             }
           },
         },

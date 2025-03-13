@@ -53,16 +53,14 @@ export default Card;
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    // backgroundColor: "rgba(217, 217, 217, 1)",
-    backgroundColor: "white",
-
+    backgroundColor: "rgba(217, 217, 217, 1)",
+    // backgroundColor: "white",
     width: 340,
     borderRadius: 20,
     marginTop: 10,
   },
   wrapper: {
-    height: 90,
-
+    height: "fit-content",
     flexDirection: "row",
     display: "flex",
     justifyContent: "space-between",
@@ -72,12 +70,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontWeight: 400,
-    fontSize: 24,
+    fontWeight: "bold",
+    fontSize: 20,
   },
   notes: {
-    fontWeight: 400,
-    fontSize: 24,
+    fontWeight: "bold",
+    fontSize: 20,
   },
   right: {
     flexDirection: "row",

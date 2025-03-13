@@ -10,10 +10,11 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { useToast } from "react-native-toast-notifications";
 
 export default function Editor() {
   const navigation = useNavigation();
-
+  const toast = useToast();
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -39,7 +40,7 @@ export default function Editor() {
 
       setTitle("");
       setNotes("");
-
+      toast.show("notes added successfully");
       navigation.goBack();
     } catch (error) {
       console.error("Error saving note", error);
